@@ -7,8 +7,8 @@ const Notification = (props) =>{
         borderRadius: 5,
         padding: 10,
         marginBottom: 10,
-        borderColor: message.includes('Deleted') ? 'red' : 'green',
-        color: message.includes('Deleted') ? 'red' : 'green'
+        borderColor: message.includes('Deleted') || message.includes('removed')? 'red' : 'green',
+        color: message.includes('Deleted') || message.includes('removed') ? 'red' : 'green'
     }
     
     if (message === null || message === undefined || message === '' ){

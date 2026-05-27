@@ -46,12 +46,18 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setNotificationMessage(`Updated ${updatedEntry.name}'s number successfully!`)
-
           notificationTimeOut()
         })
+        .catch(error => {
+          console.log(`Error occurred while updating entry: ${error}`)
+          setNotificationMessage(`Information of ${newObject.name} has already been removed from the server!`)
+          setPersons(persons.filter(person => person.id !== personToBeUpdated.id))
+          notificationTimeOut()
+          setNewName('')
+          setNewNumber('')
+        })  
       }
-      return 
-    }
+    }else{
     phoneDirectory
     .create(newObject)
     .then(NewEntry =>{
@@ -59,9 +65,9 @@ const App = () => {
       setNewName('')
       setNewNumber('')
       setNotificationMessage(`Added ${NewEntry.name} successfully!`)
-
       notificationTimeOut()
-    })
+      })
+    }
   }
 
   const onDelete = (personToDelete) => {
@@ -71,7 +77,6 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter(person => person.id !== personToDelete.id))
         setNotificationMessage(`Deleted ${personToDelete.name} successfully!`)
-
         notificationTimeOut()
       })
     }
