@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react'
-//import axios from 'axios'
+import './index.css'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Person from './components/Person'
 import phoneDirectory from './services/phoneDirectory'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('')
   
 
   useEffect(() => {
@@ -21,6 +23,12 @@ const App = () => {
       setPersons(InitialData)
     })
   },[])
+
+  const notificationTimeOut = () => {
+    setTimeout(() => {
+      setNotificationMessage('')
+    }, 5000)
+  }
 
   const addName = (event) => {
     event.preventDefault()
@@ -37,6 +45,9 @@ const App = () => {
           setPersons(persons.map(person=> person.id !== personToBeUpdated.id ? person : updatedEntry))
           setNewName('')
           setNewNumber('')
+          setNotificationMessage(`Updated ${updatedEntry.name}'s number successfully!`)
+
+          notificationTimeOut()
         })
       }
       return 
@@ -47,6 +58,9 @@ const App = () => {
       setPersons(persons.concat(NewEntry))
       setNewName('')
       setNewNumber('')
+      setNotificationMessage(`Added ${NewEntry.name} successfully!`)
+
+      notificationTimeOut()
     })
   }
 
@@ -56,6 +70,9 @@ const App = () => {
       .deleteEntry(personToDelete.id)
       .then(() => {
         setPersons(persons.filter(person => person.id !== personToDelete.id))
+        setNotificationMessage(`Deleted ${personToDelete.name} successfully!`)
+
+        notificationTimeOut()
       })
     }
   }
@@ -77,6 +94,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage}/>
+
       <Filter searchValue={searchName} onChange={handleSearchName}/>
       
       <h2>add a new</h2>
