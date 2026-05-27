@@ -29,8 +29,17 @@ const App = () => {
       number: newNumber
     }
     if (persons.some(person=> person.name ===newName)){
-      alert(`${newName} is already added to phonebook`)
-      return
+      if(window.confirm(`${newName} is already added to the phonebook, replace old number with a new one?`)){
+        const personToBeUpdated = persons.find(person => person.name === newName)
+        phoneDirectory
+        .updateEntry(personToBeUpdated.id, newObject)
+        .then(updatedEntry => {
+          setPersons(persons.map(person=> person.id !== personToBeUpdated.id ? person : updatedEntry))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
+      return 
     }
     phoneDirectory
     .create(newObject)
