@@ -1,27 +1,30 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+//import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Person from './components/Person'
+import phoneDirectory from './services/phoneDirectory'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
-  const [newName, setNewName] = useState([])
+  const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
+  
 
   useEffect(() => {
     console.log('effect')
-    axios.get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('promise fulfilled')
-      setPersons(response.data)
+    phoneDirectory
+    .getAll()
+    .then(InitialData => {
+      console.log('promise fulfilled-getAll')
+      setPersons(InitialData)
     })
   },[])
 
   const addName = (event) => {
     event.preventDefault()
-    const nameObject = {
+    const newObject = {
       name: newName,
       number: newNumber
     }
@@ -29,9 +32,23 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
       return
     }
-    setPersons(persons.concat(nameObject))
-    setNewName('')
-    setNewNumber('')
+    phoneDirectory
+    .create(newObject)
+    .then(NewEntry =>{
+      setPersons(persons.concat(NewEntry))
+      setNewName('')
+      setNewNumber('')
+    })
+  }
+
+  const onDelete = (personToDelete) => {
+    if (window.confirm(`Delete ${personToDelete.name}?`)) {
+      phoneDirectory
+      .deleteEntry(personToDelete.id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== personToDelete.id))
+      })
+    }
   }
 
   const handleNameChange = (event) => {
@@ -57,7 +74,7 @@ const App = () => {
       <PersonForm onSubmit={addName} nameValue={newName} numberValue={newNumber} onNameChange={handleNameChange} onNumberChange={handleNumberChange}/>
 
       <h2>Numbers</h2>
-      <Person contactList={filteredContacts}/>
+      <Person contactList={filteredContacts} onDelete={onDelete}/>
 
     </div>
   )

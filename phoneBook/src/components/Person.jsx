@@ -3,7 +3,9 @@ const Person = (props) =>{
     return (
         <div>
             <ul style={{listStyleType: 'none', padding: 0}}>
-                {filteredList.map(contact => <li key={contact.name}>{contact.name} {contact.number}</li>)}
+                {filteredList.map(contact =>
+                    <li key={contact.id}>{contact.name} {contact.number} <button onClick={() => props.onDelete(contact)}>Delete</button></li>
+                )}
             </ul>
         </div>
     )
