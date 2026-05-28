@@ -32,12 +32,20 @@ function App() {
 
   }
 
+  const handleShowButton = (event) => {
+    event.preventDefault()
+    const countryName = event.target.parentNode.firstChild.textContent 
+    const countryToBeShown = countryList.find(country => country.name.common === countryName)
+    setFilteredCountries([countryToBeShown])
+  }
+
+
   return (
     <div>
       <SearchCountry searchValue={searchCountry} onChange={handleSearchCountry}/>
       {filteredCountries.length === 1 ? 
        <DisplayOneCountry country={filteredCountries[0]}/> : 
-       <DisplayCountries countryList = {filteredCountries} searchValue={searchCountry}/>} 
+       <DisplayCountries countryList = {filteredCountries} searchValue={searchCountry} onClickShow={handleShowButton}/>} 
     </div>
   )
 }

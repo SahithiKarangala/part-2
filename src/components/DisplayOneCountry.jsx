@@ -11,7 +11,7 @@ const DisplayOneCountry = (props) => {
             <ul>
                 {Object.values(countryDetails.languages).map(language => <li key={language}>{language}</li>)}
             </ul>
-            <img src={countryDetails.flags.png} alt={`flag of ${countryDetails.name.common}`}/>
+            <img src={countryDetails.flags.png} alt={countryDetails.flags.alt}/>
         </div>
     )
 }

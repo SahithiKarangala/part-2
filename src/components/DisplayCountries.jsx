@@ -16,7 +16,7 @@ const DisplayCountries = (props)=>{
             <ul>
                 {countryList.map(country => 
                     console.log(`country name is ${country.name.common}`) ||
-                    <li key={country.altSpellings}>{country.name.common}</li>
+                    <li key={country.altSpellings}>{country.name.common}<button onClick={props.onClickShow}>Show</button></li>
                 )}
             </ul>
         )
