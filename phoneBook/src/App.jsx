@@ -36,6 +36,7 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+    
     if (persons.some(person=> person.name ===newName)){
       if(window.confirm(`${newName} is already added to the phonebook, replace old number with a new one?`)){
         const personToBeUpdated = persons.find(person => person.name === newName)
@@ -50,7 +51,12 @@ const App = () => {
         })
         .catch(error => {
           console.log(`Error occurred while updating entry: ${error}`)
-          setNotificationMessage(`Information of ${newObject.name} has already been removed from the server!`)
+          if(error.name === 'ValidationError'){
+            setNotificationMessage(`Validation error: ${error.message}`)
+          }else{
+            setNotificationMessage(`Information of ${newObject.name} has already been removed from the server!`)
+          }
+          
           setPersons(persons.filter(person => person.id !== personToBeUpdated.id))
           notificationTimeOut()
           setNewName('')
