@@ -51,11 +51,7 @@ const App = () => {
         })
         .catch(error => {
           console.log(`Error occurred while updating entry: ${error}`)
-          if(error.name === 'ValidationError'){
-            setNotificationMessage(`Validation error: ${error.message}`)
-          }else{
-            setNotificationMessage(`Information of ${newObject.name} has already been removed from the server!`)
-          }
+          setNotificationMessage(`Information of ${newObject.name} has already been removed from the server!`)
           
           setPersons(persons.filter(person => person.id !== personToBeUpdated.id))
           notificationTimeOut()
@@ -72,6 +68,11 @@ const App = () => {
       setNewNumber('')
       setNotificationMessage(`Added ${NewEntry.name} successfully!`)
       notificationTimeOut()
+      })
+      .catch(error => {
+        console.log(`Error occurred while adding entry: ${error}`)
+        setNotificationMessage(`Validation error: ${error.response.data.error}`)
+        notificationTimeOut()
       })
     }
   }
